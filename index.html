@@ -2,15 +2,82 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <title>Chatbot</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ChatBot</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #f0f4f8;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    .chat-container {
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      width: 90%;
+      max-width: 500px;
+      text-align: center;
+    }
+
+    .chat-container img {
+      max-width: 100px;
+      margin-bottom: 20px;
+    }
+
+    textarea {
+      width: 100%;
+      height: 200px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      padding: 10px;
+      resize: none;
+      font-size: 14px;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      font-size: 14px;
+    }
+
+    button {
+      padding: 12px 24px;
+      background-color: #4f46e5;
+      color: white;
+      border: none;
+      border-radius: 30px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background-color: #3730a3;
+    }
+  </style>
 </head>
 <body>
-  <h1>Chatbot</h1>
-  <textarea id="chatBox" rows="15" cols="60" readonly></textarea><br />
-  <form id="chatForm">
-    <input type="text" id="userInput" placeholder="Digite sua mensagem" autocomplete="off" required />
-    <button type="submit">Enviar</button>
-  </form>
+  <div class="chat-container">
+    <!-- Troque o link abaixo pela URL da imagem do GitHub -->
+    <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="Logo">
+    
+    <h2>ChatBot</h2>
+    <textarea id="chat" readonly placeholder="Respostas aparecerão aqui..."></textarea><br />
+    <input type="text" id="mensagem" placeholder="Digite sua mensagem..." />
+    <button onclick="enviar()">Enviar</button>
+  </div>
 
   <script>
     const form = document.getElementById('chatForm');
