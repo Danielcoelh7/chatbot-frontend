@@ -18,25 +18,43 @@
   <button onclick="enviar()">Enviar</button>
 
   <script>
-    async function enviar() {
-      const input = document.getElementById("mensagem");
-      const texto = input.value;
-      if (!texto) return;
+  const form = document.querySelector('form');
+  const chatBox = document.querySelector('textarea');
 
-      const chat = document.getElementById("chat");
-      chat.innerHTML += `<div class="msg user"><strong>Você:</strong> ${texto}</div>`;
-      input.value = "";
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
 
-      const resposta = await fetch("https://api-nmdu.onrender.com", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ mensagem: texto })
+    const input = form.elements[0];
+    const userMessage = input.value.trim();
+    if (!userMessage) return; // não envia mensagem vazia
+
+    // Exibe a mensagem do usuário no chat
+    chatBox.value += `Você: ${userMessage}\n`;
+
+    try {
+      const response = await fetch('https://api-nmdu.onrender.com/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ mensagem: userMessage }),
       });
 
-      const json = await resposta.json();
-      chat.innerHTML += `<div class="msg bot"><strong>Bot:</strong> ${json.resposta}</div>`;
-      chat.scrollTop = chat.scrollHeight;
+      if (!response.ok) {
+        throw new Error(`Erro na API: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+
+      // Exibe a resposta do bot no chat
+      chatBox.value += `Bot: ${data.resposta}\n`;
+
+    } catch (error) {
+      chatBox.value += `Erro: ${error.message}\n`;
     }
-  </script>
+
+    input.value = '';
+    chatBox.scrollTop = chatBox.scrollHeight; // rola o chat para a última mensagem
+  });
+</script>
+
 </body>
 </html>
