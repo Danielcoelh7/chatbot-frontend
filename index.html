@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Chatbot Simples</title>
+  <style>
+    body { font-family: Arial; max-width: 600px; margin: 50px auto; }
+    #chat { border: 1px solid #ccc; padding: 10px; height: 300px; overflow-y: auto; margin-bottom: 10px; }
+    .msg { margin-bottom: 10px; }
+    .user { color: blue; }
+    .bot { color: green; }
+  </style>
+</head>
+<body>
+  <h1>Chatbot</h1>
+  <div id="chat"></div>
+  <input type="text" id="mensagem" placeholder="Digite sua mensagem" style="width: 80%;" />
+  <button onclick="enviar()">Enviar</button>
+
+  <script>
+    async function enviar() {
+      const input = document.getElementById("mensagem");
+      const texto = input.value;
+      if (!texto) return;
+
+      const chat = document.getElementById("chat");
+      chat.innerHTML += `<div class="msg user"><strong>Você:</strong> ${texto}</div>`;
+      input.value = "";
+
+      const resposta = await fetch("https://api.render.com/deploy/srv-d0ihoc24d50c73dknks0?key=KcfxkuJZPJ4", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ mensagem: texto })
+      });
+
+      const json = await resposta.json();
+      chat.innerHTML += `<div class="msg bot"><strong>Bot:</strong> ${json.resposta}</div>`;
+      chat.scrollTop = chat.scrollHeight;
+    }
+  </script>
+</body>
+</html>
