@@ -27,7 +27,7 @@
       chat.innerHTML += `<div class="msg user"><strong>Você:</strong> ${texto}</div>`;
       input.value = "";
 
-      const resposta = await fetch("https://api.render.com/deploy/srv-d0ihoc24d50c73dknks0?key=KcfxkuJZPJ4", {
+      const resposta = await fetch("https://api-nmdu.onrender.com", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ mensagem: texto })
