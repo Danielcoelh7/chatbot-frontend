@@ -37,17 +37,35 @@
       margin: 10px 0 20px 0;
     }
 
-    #chatBox {
+    .chat-box {
       width: 100%;
       height: 300px;
       border: 1px solid #ccc;
       border-radius: 10px;
       padding: 10px;
-      resize: none;
-      font-size: 14px;
       background-color: #f9fafb;
+      overflow-y: auto;
+      text-align: left;
       box-sizing: border-box;
       margin-bottom: 15px;
+    }
+
+    .message {
+      margin: 8px 0;
+    }
+
+    .user {
+      color: #007f3d;
+      font-weight: bold;
+    }
+
+    .bot {
+      color: #333;
+      background-color: #e0f7e9;
+      padding: 8px 12px;
+      border-radius: 15px;
+      display: inline-block;
+      max-width: 80%;
     }
 
     #userInput {
@@ -78,13 +96,12 @@
 </head>
 <body>
   <div class="chat-container">
-    <!-- ✅ Logo funcionando -->
-    <img src="Instituto_Federal_Marca_2015.svg.png" alt="Instituto Federal">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Instituto_Federal_do_Brasil_-_Marca_Vertical.png/480px-Instituto_Federal_do_Brasil_-_Marca_Vertical.png" alt="Instituto Federal">
 
     <h2>ChatBot IF</h2>
 
     <form id="chatForm">
-      <textarea id="chatBox" readonly placeholder="As respostas aparecerão aqui..."></textarea><br />
+      <div id="chatBox" class="chat-box"></div>
       <input type="text" id="userInput" placeholder="Digite sua mensagem..." />
       <button type="submit">Enviar</button>
     </form>
@@ -101,7 +118,8 @@
       const userMessage = userInput.value.trim();
       if (!userMessage) return;
 
-      chatBox.value += `Você: ${userMessage}\n`;
+      // Adiciona a mensagem do usuário
+      chatBox.innerHTML += `<div class="message user">Você: ${userMessage}</div>`;
 
       try {
         const response = await fetch('https://api-nmdu.onrender.com/chat', {
@@ -115,10 +133,12 @@
         }
 
         const data = await response.json();
-        chatBox.value += `Bot: ${data.resposta}\n\n`;
+
+        // Adiciona a resposta do bot sem emoji
+        chatBox.innerHTML += `<div class="message bot">${data.resposta}</div>`;
 
       } catch (error) {
-        chatBox.value += `Erro: ${error.message}\n`;
+        chatBox.innerHTML += `<div class="message bot">Erro: ${error.message}</div>`;
       }
 
       userInput.value = '';
