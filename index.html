@@ -11,7 +11,6 @@
       background: #f0f4f8;
       font-family: 'Segoe UI', sans-serif;
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
       height: 100vh;
@@ -21,39 +20,44 @@
       background: #ffffff;
       padding: 30px;
       border-radius: 20px;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
       width: 95%;
       max-width: 600px;
       text-align: center;
     }
 
     .chat-container img {
-      max-width: 120px;
-      margin-bottom: 20px;
+      width: 120px;
       display: block;
-      margin-left: auto;
-      margin-right: auto;
+      margin: 0 auto 10px auto;
+    }
+
+    h2 {
+      color: #007f3d;
+      margin: 10px 0 20px 0;
     }
 
     #chatBox {
       width: 100%;
       height: 300px;
-      margin-bottom: 15px;
       border: 1px solid #ccc;
       border-radius: 10px;
       padding: 10px;
       resize: none;
       font-size: 14px;
       background-color: #f9fafb;
+      box-sizing: border-box;
+      margin-bottom: 15px;
     }
 
     #userInput {
       width: 100%;
       padding: 15px;
-      margin-bottom: 10px;
       border: 1px solid #ccc;
       border-radius: 10px;
       font-size: 16px;
+      margin-bottom: 15px;
+      box-sizing: border-box;
     }
 
     button {
@@ -64,23 +68,18 @@
       border-radius: 30px;
       font-size: 16px;
       cursor: pointer;
-      transition: background 0.3s;
+      transition: background-color 0.3s;
     }
 
     button:hover {
       background-color: #005f2d;
     }
-
-    h2 {
-      margin-top: 0;
-      color: #007f3d;
-    }
   </style>
 </head>
 <body>
   <div class="chat-container">
-    <!-- Logo do Instituto Federal -->
-    <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/IFSP_-_Marca_Vertical_2015.png" alt="Instituto Federal">
+    <!-- ✅ Logo funcionando -->
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Instituto_Federal_do_Brasil_-_Marca_Vertical.png/480px-Instituto_Federal_do_Brasil_-_Marca_Vertical.png" alt="Instituto Federal">
 
     <h2>ChatBot IF</h2>
 
