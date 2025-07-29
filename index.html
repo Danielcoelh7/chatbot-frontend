@@ -2,18 +2,51 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>ChatBot IF</title>
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       padding: 0;
-      background: #f0f4f8;
       font-family: 'Segoe UI', sans-serif;
+      background-color: #f0f4f8;
       display: flex;
-      align-items: center;
-      justify-content: center;
       height: 100vh;
+    }
+
+    .sidebar {
+      width: 220px;
+      background-color: #1e1e1e;
+      color: white;
+      padding: 15px;
+    }
+
+    .sidebar h2 {
+      font-size: 18px;
+      margin-bottom: 15px;
+    }
+
+    .history-button {
+      background-color: #333;
+      color: white;
+      border: none;
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      text-align: left;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .main {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     .chat-container {
@@ -21,20 +54,29 @@
       padding: 30px;
       border-radius: 20px;
       box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-      width: 95%;
+      width: 90%;
       max-width: 600px;
       text-align: center;
     }
 
     .chat-container img {
-      width: 120px;
-      display: block;
-      margin: 0 auto 10px auto;
+      width: 100px;
+      margin-bottom: 10px;
     }
 
     h2 {
       color: #007f3d;
-      margin: 10px 0 20px 0;
+      margin: 10px 0 15px 0;
+    }
+
+    .info-block {
+      font-size: 14px;
+      background: #f4f4f4;
+      border-left: 4px solid #007f3d;
+      padding: 10px;
+      margin-bottom: 15px;
+      border-radius: 5px;
+      text-align: left;
     }
 
     .chat-box {
@@ -46,8 +88,8 @@
       background-color: #f9fafb;
       overflow-y: auto;
       text-align: left;
-      box-sizing: border-box;
       margin-bottom: 15px;
+      font-size: 14px;
     }
 
     .message {
@@ -60,70 +102,96 @@
     }
 
     .bot {
-  font-family: monospace; /* tipo de fonte monoespaçada */
-  color: #000000; /* texto preto */
-  background-color: transparent; /* fundo transparente */
-  white-space: pre-wrap; /* mantém quebras de linha e espaços */
-  padding: 0;
-  border: none;
-  display: block;
-  margin-top: 8px;
-}
+      font-family: monospace;
+      color: #000;
+      background-color: transparent;
+      white-space: pre-wrap;
+    }
 
+    form {
+      display: flex;
+      gap: 10px;
+    }
 
     #userInput {
-      width: 100%;
-      padding: 15px;
+      flex: 1;
+      padding: 12px;
       border: 1px solid #ccc;
       border-radius: 10px;
       font-size: 16px;
-      margin-bottom: 15px;
-      box-sizing: border-box;
     }
 
     button {
-      padding: 12px 24px;
+      padding: 12px 20px;
       background-color: #007f3d;
       color: white;
       border: none;
       border-radius: 30px;
-      font-size: 16px;
+      font-size: 14px;
       cursor: pointer;
-      transition: background-color 0.3s;
     }
 
     button:hover {
       background-color: #005f2d;
     }
+
+    #downloadPDF {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 13px;
+      margin-top: 10px;
+      background-color: #d32f2f;
+    }
+
+    #downloadPDF:hover {
+      background-color: #b71c1c;
+    }
   </style>
 </head>
 <body>
-  <div class="chat-container">
-    <img src="Instituto_Federal_Marca_2015.svg.png" alt="Instituto Federal">
 
-    <h2>ChatBot IF</h2>
-
-    <form id="chatForm">
-      <div id="chatBox" class="chat-box"></div>
-      <input type="text" id="userInput" placeholder="Digite sua mensagem..." />
-      <button type="submit">Enviar</button>
-    </form>
+  <div class="sidebar">
+    <h2>Histórico</h2>
+    <button class="history-button">Quantas aulas tem a matéria de algoritmo e programação em ADS?</button>
+    <button class="history-button">A matéria de física experimental utiliza laboratório?</button>
   </div>
 
+  <div class="main">
+    <div class="chat-container">
+      <img src="IFSP_Logo.jpg" alt="Instituto Federal">
+
+      <h2>ChatBot IF</h2>
+
+      <div class="info-block">
+        Este chatbot foi criado para responder perguntas simples, automatizar dúvidas frequentes e auxiliar nos estudos. Envie uma mensagem para começar!
+      </div>
+
+      <div id="chatBox" class="chat-box"></div>
+
+      <form id="formChat">
+        <input type="text" id="userInput" placeholder="Digite sua mensagem..." />
+        <button type="submit" id="enviar">Enviar</button>
+      </form>
+
+      <button id="downloadPDF">📄 Baixar Resposta em PDF</button>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
   <script>
-    const form = document.getElementById('chatForm');
     const chatBox = document.getElementById('chatBox');
     const userInput = document.getElementById('userInput');
+    const downloadPDF = document.getElementById('downloadPDF');
 
-    form.addEventListener('submit', async (event) => {
-      event.preventDefault();
-
+    document.getElementById('formChat').addEventListener('submit', async (e) => {
+      e.preventDefault();
       const userMessage = userInput.value.trim();
       if (!userMessage) return;
 
-      // Adiciona a mensagem do usuário
       chatBox.innerHTML += `<div class="message user">Você: ${userMessage}</div>`;
-
+      
       try {
         const response = await fetch('https://api-nmdu.onrender.com/chat', {
           method: 'POST',
@@ -131,22 +199,23 @@
           body: JSON.stringify({ mensagem: userMessage }),
         });
 
-        if (!response.ok) {
-          throw new Error(`Erro na API: ${response.statusText}`);
-        }
-
         const data = await response.json();
-
-        // Adiciona a resposta do bot sem emoji
         chatBox.innerHTML += `<div class="message bot">${data.resposta}</div>`;
-
-      } catch (error) {
-        chatBox.innerHTML += `<div class="message bot">Erro: ${error.message}</div>`;
+      } catch (err) {
+        chatBox.innerHTML += `<div class="message bot">Erro ao responder: ${err.message}</div>`;
       }
 
       userInput.value = '';
       chatBox.scrollTop = chatBox.scrollHeight;
     });
+
+    downloadPDF.addEventListener('click', () => {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      doc.text(chatBox.innerText, 10, 10);
+      doc.save("resposta-chatbot.pdf");
+    });
   </script>
+
 </body>
 </html>
