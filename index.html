@@ -157,7 +157,7 @@
       if (docSnap.exists()) {
         userHistory = docSnap.data().messages || [];
         renderHistory();
-        renderChat();
+        chatBox.innerHTML = '';
       }
     }
 
@@ -252,11 +252,41 @@
     });
 
     document.getElementById('downloadPDF').addEventListener('click', () => {
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
-      doc.text(chatBox.innerText, 10, 10);
-      doc.save("resposta-chatbot.pdf");
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ unit: "mm", format: "a4" });
+  const marginLeft = 15;
+  const marginTop = 20;
+  const lineHeight = 8;
+  let y = marginTop;
+
+  // Título
+  doc.setFontSize(16);
+  doc.text("Histórico do ChatBot IF", marginLeft, y);
+  y += 12;
+
+  // Data da exportação
+  doc.setFontSize(10);
+  doc.text("Exportado em: " + new Date().toLocaleString(), marginLeft, y);
+  y += 10;
+
+  // Conteúdo do chat
+  doc.setFontSize(12);
+  const linhas = chatBox.innerText.split("\n");
+
+  linhas.forEach(linha => {
+    const textoQuebrado = doc.splitTextToSize(linha, 180); // largura máxima
+    textoQuebrado.forEach(t => {
+      if (y > 280) { // cria nova página se passar do limite
+        doc.addPage();
+        y = marginTop;
+      }
+      doc.text(t, marginLeft, y);
+      y += lineHeight;
     });
+  });
+
+  doc.save("resposta-chatbot.pdf");
+});
   </script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
