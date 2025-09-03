@@ -205,15 +205,15 @@
     onAuthStateChanged(auth, async (user) => {
       if (user) {
         const email = user.email;
-        const dominioPermitido = "@aluno.ifsp.edu.br";
-        if (email.endsWith(dominioPermitido)) {
+        const dominiosPermitidos = ["@aluno.ifsp.edu.br", "@ifsp.edu.br"];
+        if (dominiosPermitidos.some(dominio => email.endsWith(dominio))) {
           currentUser = user;
           chatContainer.style.display = "block";
           loginBtn.style.display = "none";
           logoutBtn.style.display = "inline-block";
           await loadUserHistory(user.uid);
         } else {
-          alert("Acesso permitido apenas para contas " + dominioPermitido);
+          alert("Acesso permitido apenas para contas dos domínios: " + dominiosPermitidos.join(", "));
           signOut(auth);
         }
       } else {
